@@ -20,7 +20,7 @@ class DetailViewController: UIViewController {
         imageViewer.image = UIImage(named: pictureName)
         }
         navigationItem.largeTitleDisplayMode = .never
-        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
 //        title = selectedPicture
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -32,5 +32,12 @@ class DetailViewController: UIViewController {
         navigationController?.hidesBarsOnTap = false
     }
     
+    @objc func shareTapped(){
+        guard let image = imageViewer.image?.jpegData(compressionQuality: 0.8) else {fatalError("error geting the photo")}
+        let vc = UIActivityViewController(activityItems: [image], applicationActivities: [])
+        //the line for ipad to not crash
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc,animated: true)
+    }
 
 }
